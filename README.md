@@ -29,7 +29,7 @@ third_parsing_urls = ["https://www.example.com/2", "https://www.example.com/3"]
 
 new, old = filter_ads(third_parsing_urls)
 new = ["https://www.example.com/3"]
-old = ["https://www.example.com/2"]
+old = ["https://www.example.com/1"]
 ```
 It uses a fast sqlite database to store urls. The database file ('ads.db') will be created in the root directory
 
