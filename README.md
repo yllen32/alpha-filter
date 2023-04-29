@@ -12,22 +12,22 @@ pip install alpha-filter
 ### Usage
 
 ```python
-from alpha-filter import filter_urls
+from alphafilter import filter_ads
 
 first_parsing_urls = ["https://www.example.com/1", "https://www.example.com/2"]
-new, old = filter_urls(first_parsing_urls)
+new, old = filter_ads(first_parsing_urls)
 new = ["https://www.example.com/1", "https://www.example.com/2"]
 old = []
 
 second_parsing_urls = first_parsing_urls # second parsing same with first
 
-new, old = filter_urls(second_parsing_urls)
+new, old = filter_ads(second_parsing_urls)
 new = []
 old = []
 
 third_parsing_urls = ["https://www.example.com/2", "https://www.example.com/3"]
 
-new, old = filter_urls(third_parsing_urls)
+new, old = filter_ads(third_parsing_urls)
 new = ["https://www.example.com/3"]
 old = ["https://www.example.com/2"]
 ```
