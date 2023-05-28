@@ -46,6 +46,16 @@ def mark_as_processed(urls: list[str]) -> None:
     con.close()
 
 
+def is_processed(url: str) -> bool:
+    """Проверить помечено ли объявление как is_processed в базе данных"""
+    cur, con = _get_cursor()
+    cur.execute(f"SELECT is_processed FROM {TABLE_NAME} WHERE url = ?", (url,))
+    result = cur.fetchone()
+    cur.close()
+    con.close()
+    return result[0] == 1
+
+
 def _save_ads_in_db(urls, category, cur, con) -> None:
     """Добавить спарсенные объявления(их урл) в локальную бд."""
     urls_to_insert = _serialize_urls_for_sqlite(urls, category)
@@ -152,7 +162,10 @@ def __test_filter():
         for url in urls5:
             cur.execute(f"SELECT is_processed FROM {TABLE_NAME} WHERE url = ?", (url,))
             result = cur.fetchone()
-            assert result[0] == 1
+            assert result[0] == 1 
+        assert is_processed(urls5[0]) == True
+        assert is_processed(urls5[1]) == True
+        assert is_processed(urls2[0]) == False
         cur.close()
         con.close()
 
