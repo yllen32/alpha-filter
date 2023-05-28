@@ -54,6 +54,8 @@ def is_processed(url: str) -> bool:
     result = cur.fetchone()
     cur.close()
     con.close()
+    if not result:
+        return False
     return result[0] == 1
 
 
@@ -167,6 +169,7 @@ def __test_filter():
         assert is_processed(urls5[0]) == True
         assert is_processed(urls5[1]) == True
         assert is_processed(urls2[0]) == False
+        assert is_processed("https://www.example1.com/no_exists") == False
         cur.close()
         con.close()
 
