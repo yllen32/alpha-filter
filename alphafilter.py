@@ -48,7 +48,7 @@ def _delete_deprecated(deprecated_url, cur, con) -> None:
     print(f'Удалено {len(deprecated_url)} объявлений в базу данных')
 
 
-def _get_cursor() -> sqlite3.Cursor:
+def _get_cursor() -> tuple[sqlite3.Cursor]:
     """Подлючится к бд."""
     con = sqlite3.connect('ads.db')
     cur = con.cursor()
