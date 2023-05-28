@@ -79,38 +79,39 @@ def __test_filter():
     global TABLE_NAME
     name_storage = TABLE_NAME
     TABLE_NAME = 'test_database'
-    _drop_table()
-    category = 'test_category'
-    urls1 = [f'https://www.example.com/{i}' for i in range(10)]
+    try:
+        _drop_table()
+        category = 'test_category'
+        urls1 = [f'https://www.example.com/{i}' for i in range(10)]
 
-    new1, old1 = filter_ads(urls1, category)
-    assert (len(new1) == 10) and (len(old1) == 0)
+        new1, old1 = filter_ads(urls1, category)
+        assert (len(new1) == 10) and (len(old1) == 0)
 
-    new2, old2 = filter_ads(urls1, category)
-    assert (len(new2) == 0) and (len(old2) == 0)
+        new2, old2 = filter_ads(urls1, category)
+        assert (len(new2) == 0) and (len(old2) == 0)
 
-    urls2 = [f'https://www.example.com/{i}' for i in range(5, 15)]
-    new3, old3 = filter_ads(urls2, category)
-    assert (len(new3) == 5) and (len(old3) == 5)
+        urls2 = [f'https://www.example.com/{i}' for i in range(5, 15)]
+        new3, old3 = filter_ads(urls2, category)
+        assert (len(new3) == 5) and (len(old3) == 5)
 
-    urls4 = [f'https://www.example.com/n{i}' for i in range(5, 15)]
-    new4, old4 = filter_ads(urls4, 'new_category')
-    assert (len(new4) == 10) and (len(old4) == 0)
+        urls4 = [f'https://www.example.com/n{i}' for i in range(5, 15)]
+        new4, old4 = filter_ads(urls4, 'new_category')
+        assert (len(new4) == 10) and (len(old4) == 0)
 
-    urls5 = [f'https://www.example.com/n{i}' for i in range(6, 15)]
-    new5, old5 = filter_ads(urls5, 'new_category')
-    assert (len(new5) == 0) and (len(old5) == 1)
+        urls5 = [f'https://www.example.com/n{i}' for i in range(6, 15)]
+        new5, old5 = filter_ads(urls5, 'new_category')
+        assert (len(new5) == 0) and (len(old5) == 1)
 
-    category_new = 'other'
-    urls_new = ['https://www.example1.com/8', 'https://www.example1.com/9']
-    new_urls, deprecated_urls = filter_ads(urls_new, category_new)
-    assert new_urls == urls_new or new_urls == tuple(urls_new)
-    assert deprecated_urls == []
+        category_new = 'other'
+        urls_new = ['https://www.example1.com/8', 'https://www.example1.com/9']
+        new_urls, deprecated_urls = filter_ads(urls_new, category_new)
+        assert new_urls == urls_new or new_urls == tuple(urls_new)
+        assert deprecated_urls == []
 
-    print('Тестирование создания и фильтрации прошло успешно!')
-    _drop_table()
-    TABLE_NAME = name_storage
-
+        print('Тестирование создания и фильтрации прошло успешно!')
+        _drop_table()
+    finally:
+        TABLE_NAME = name_storage
 
 if __name__ == '__main__':
     from sys import argv
