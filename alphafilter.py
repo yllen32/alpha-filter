@@ -57,7 +57,11 @@ def _create_table() -> None:
     """Создать таблицу с урл объявлений, если её еще не существует, создать курсор и подключение"""
     cur, _ = _get_cursor()
     cur.execute(f"""CREATE TABLE IF NOT EXISTS {TABLE_NAME}(
-        url TEXT PRIMARY KEY, category TEXT, date TEXT default CURRENT_DATE)""")
+        url TEXT PRIMARY KEY,
+        category TEXT,
+        date TEXT default CURRENT_DATE,
+        is_processed INTEGER DEFAULT 0
+    )""")
     print(f'Создана таблица {TABLE_NAME}')
 
 
