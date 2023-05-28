@@ -29,9 +29,26 @@ def filter_ads(
     return new_urls, list(deprecated_url)
 
 
+def mark_as_processed(urls: list[str]) -> None:
+    """Пометить урлы флагом 1 как обработанные."""
+    cur, con = _get_cursor()
+    for url in urls:
+        cur.execute(
+            f"""
+                UPDATE {TABLE_NAME}
+                SET is_processed = 1
+                WHERE url = ?;
+            """, (url,),
+        )
+    con.commit()
+    print(f'Отмечено {len(urls)} как is_processed')
+    cur.close()
+    con.close()
+
+
 def _save_ads_in_db(urls, category, cur, con) -> None:
     """Добавить спарсенные объявления(их урл) в локальную бд."""
-    urls_to_insert = str(tuple([(url, category) for url in urls]))[1:-1]
+    urls_to_insert = _serialize_urls_for_sqlite(urls, category)
     cur.execute(f"""INSERT OR IGNORE INTO {TABLE_NAME} (url, category) VALUES {urls_to_insert}""")
     con.commit()
     print(f'Сохранено {len(urls)} объявлений в базу данных')
@@ -129,6 +146,15 @@ def __test_filter():
         new_urls, deprecated_urls = filter_ads(urls_new, category_new)
         assert new_urls == urls_new or new_urls == tuple(urls_new)
         assert deprecated_urls == []
+
+        mark_as_processed(urls5)
+        cur, con = _get_cursor()
+        for url in urls5:
+            cur.execute(f"SELECT is_processed FROM {TABLE_NAME} WHERE url = ?", (url,))
+            result = cur.fetchone()
+            assert result[0] == 1
+        cur.close()
+        con.close()
 
         print('Тестирование создания и фильтрации прошло успешно!')
         _drop_table()
