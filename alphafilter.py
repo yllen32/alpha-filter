@@ -1,6 +1,7 @@
 import sqlite3
 
 TABLE_NAME = 'ads'
+DATABASE_NAME = 'ads.db'
 
 def filter_ads(
         urls: list[str],
@@ -9,7 +10,8 @@ def filter_ads(
         ) -> tuple[list[str], list[str]]:
     """Сравнить новые объявления с существующими, удалить из списка те которые
     уже есть в бд. Вернуть список новых и устаревших урлов"""
-    _create_table()
+    if not is_table_exists():
+        _create_table()
     new_urls = [url for url in urls]
     cur, con = _get_cursor()
     res = cur.execute(f"""SELECT url FROM {TABLE_NAME} WHERE category="{category}" AND date > DATETIME('now', '-{obsolescence} day')""")
@@ -71,6 +73,21 @@ def _drop_table() -> None:
     cur.execute(f"DROP TABLE IF EXISTS {TABLE_NAME}")
     con.commit()
     print(f'Очищена таблица {TABLE_NAME}')
+
+
+def is_table_exists(database_name: str = DATABASE_NAME, table_name: str = TABLE_NAME) -> bool:
+    conn = sqlite3.connect(database_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    if (table_name,) in tables:
+        cursor.close()
+        conn.close()
+        return True
+    else:
+        cursor.close()
+        conn.close()
+        return False
 
 
 def __test_filter():
