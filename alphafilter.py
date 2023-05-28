@@ -76,6 +76,9 @@ def _drop_table() -> None:
 def __test_filter():
     """Тестирование основного функционала"""
     print('Начинается тестирование')
+    global TABLE_NAME
+    name_storage = TABLE_NAME
+    TABLE_NAME = 'test_database'
     _drop_table()
     category = 'test_category'
     urls1 = [f'https://www.example.com/{i}' for i in range(10)]
@@ -106,6 +109,7 @@ def __test_filter():
 
     print('Тестирование создания и фильтрации прошло успешно!')
     _drop_table()
+    TABLE_NAME = name_storage
 
 
 if __name__ == '__main__':
