@@ -3,6 +3,7 @@ import sqlite3
 TABLE_NAME = 'ads'
 DATABASE_NAME = 'ads.db'
 
+
 def filter_ads(
         urls: list[str],
         category: str = 'default',
