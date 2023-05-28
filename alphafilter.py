@@ -90,6 +90,11 @@ def is_table_exists(database_name: str = DATABASE_NAME, table_name: str = TABLE_
         return False
 
 
+def _serialize_urls_for_sqlite(urls: str, category: str) -> str:
+    """Преобразовать урлы в строку пригодную для выполнения."""
+    return str(tuple([(url, category) for url in urls]))[1:-1]
+
+
 def __test_filter():
     """Тестирование основного функционала"""
     print('Начинается тестирование')
