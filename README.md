@@ -12,25 +12,44 @@ pip install alpha-filter
 ### Usage
 
 ```python
-from alphafilter import filter_ads
+from alphafilter import filter_ads, mark_as_processed, is_processed
 
-first_parsing_urls = ["https://www.example.com/1", "https://www.example.com/2"]
-new, old = filter_ads(first_parsing_urls)
-new = ["https://www.example.com/1", "https://www.example.com/2"]
-old = []
+>>> first_parsing_urls = ["https://www.example.com/1", "https://www.example.com/2"]
+>>> new, old = filter_ads(first_parsing_urls)
+>>> new
+["https://www.example.com/1", "https://www.example.com/2"]
+>>> old
+[]
 
 second_parsing_urls = first_parsing_urls # second parsing same with first
 
-new, old = filter_ads(second_parsing_urls)
-new = []
-old = []
+>>> new, old = filter_ads(second_parsing_urls)
+>>> new
+[]
+>>> old
+[]
 
-third_parsing_urls = ["https://www.example.com/2", "https://www.example.com/3"]
+>>>third_parsing_urls = ["https://www.example.com/2", "https://www.example.com/3"]
 
-new, old = filter_ads(third_parsing_urls)
-new = ["https://www.example.com/3"]
-old = ["https://www.example.com/1"]
+>>> new, old = filter_ads(third_parsing_urls)
+>>> new
+["https://www.example.com/3"]
+>>> old
+["https://www.example.com/1"]
 ```
+Also you can mark your urls for some purposes
+
+
+```python
+>>> urls_for_mark = ["https://www.example.com/2", "https://www.example.com/3"]
+>>> mark_as_processed(urls_for_mark)
+>>> is_processed("https://www.example.com/2")
+True
+>>> is_processed("https://www.example.com/4")
+False
+```
+
+
 It uses a fast sqlite database to store urls. The database file ('ads.db') will be created in the root directory
 
 __Warning!!! this package has no protection against sql injection, do not use it for the external interface__
